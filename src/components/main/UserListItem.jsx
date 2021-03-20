@@ -7,6 +7,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import { Link } from "react-router-dom";
 import MailIcon from "@material-ui/icons/Mail";
 import WcIcon from "@material-ui/icons/Wc";
+import {connect} from "react-redux";
+import {activeUserHandler, userDelete} from "../../redux/actions/action";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const UserListItem = (props) => {
-  const { fullName, email, sex } = props;
+const UserListItem = ({activeUserHandler,userDelete, user, users}) => {
+  const { id, fullName, email, sex } = user;
 
   const selectGender = (gender) =>
     gender === "male" ? "Мужчина" : gender === "female" ? "Женщина" : "Другое";
@@ -53,12 +55,26 @@ export const UserListItem = (props) => {
         <Grid item md={3} xs={6} className={classes.icons}>
           <Link to={"/user"}>
             {/* TODO: Передать id */}
-            <VisibilityIcon />
+            <VisibilityIcon onClick={() => activeUserHandler(id)} />
           </Link>
           <EditIcon />
-          <DeleteIcon />
+          <DeleteIcon onClick={() => userDelete(users, id)} />
         </Grid>
       </Grid>
     </>
   );
 };
+
+
+const mapStateToProps = (state) => {
+  return {
+    users: state.main.users
+  }
+}
+
+const mapDispatchToProps = {
+  activeUserHandler,
+  userDelete
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserListItem)

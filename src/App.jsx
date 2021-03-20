@@ -1,7 +1,7 @@
 import {Container, makeStyles, Paper} from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
 import  Main  from "./Pages/Main";
-import { User } from "./Pages/User";
+import User from "./Pages/User";
 import { Error404 } from "./Pages/Error404";
 
 
