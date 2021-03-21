@@ -7,8 +7,6 @@ const User = ({ activeUser, users }) => {
   const selectGender = (gender) =>
     gender === "male" ? "Мужчина" : gender === "female" ? "Женщина" : "Другое";
 
-  console.log(activeUser);
-
   return (
     <>
       {activeUser === -1 ? (

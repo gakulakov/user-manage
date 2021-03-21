@@ -1,7 +1,6 @@
 import {ACTIVE_GENDER, ACTIVE_USER, ADD_USER, USER_DELETE, USER_EDIT} from "../types/types";
 
 export const addUserHandler = (data) => {
-    console.log(data)
     return {
       type: ADD_USER,
       payload: data
