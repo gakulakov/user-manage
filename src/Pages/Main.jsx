@@ -1,45 +1,60 @@
 import React from "react";
-import { Button, ButtonGroup, Grid, makeStyles } from "@material-ui/core";
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  makeStyles, Radio,
+  RadioGroup
+} from "@material-ui/core";
 import UserList from "../components/main/UserList";
 import ModalUser from "../components/main/ModalUser";
-import {connect} from "react-redux";
-import {activeGenderHandler} from "../redux/actions/action";
+import { connect } from "react-redux";
+import { activeGenderHandler } from "../redux/actions/action";
+import {PlaceHolder} from "../components/main/PlaceHolder";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: "25px",
   },
   modal: {
-    textAlign: 'right'
-  }
+    textAlign: "right",
+  },
 }));
 
-export const Main = ({activeGenderHandler, users}) => {
+export const Main = ({ activeGenderHandler, activeGender, users }) => {
   const classes = useStyles();
+
+
+  const handleChange = (event) => {
+    activeGenderHandler(event.target.value)
+  };
+
 
   return (
     <>
-      <Grid container>
+      <Grid justify={!users.length ? "center" : 'center'} container>
         <Grid item xs={12} classes={{ root: classes.root }}>
-          <Grid container>
-            <Grid item xs={6}>
-            <ButtonGroup
-              color="primary"
-              aria-label="outlined primary button group"
-            >
-              <Button onClick={() => activeGenderHandler('all')}>Все</Button>
-              <Button onClick={() => activeGenderHandler('male')}>Мужчины</Button>
-              <Button onClick={() => activeGenderHandler('female')}>Женщины</Button>
-              <Button onClick={() => activeGenderHandler('other')}>Другие</Button>
-            </ButtonGroup>
+          <Grid container justify={"space-between"} spacing={2}>
+            <Grid item>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Пол</FormLabel>
+                <RadioGroup row aria-label="gender" name="gender1" value={activeGender} onChange={handleChange}>
+                  <FormControlLabel value="all" control={<Radio />} label="Все" />
+                  <FormControlLabel value="male" control={<Radio />} label="Мужчины" />
+                  <FormControlLabel value="female" control={<Radio />} label="Женщины" />
+                  <FormControlLabel value="other" control={<Radio />} label="Другие" />
+                </RadioGroup>
+              </FormControl>
             </Grid>
-            <Grid item xs={6} className={classes.modal}>
-            <ModalUser />
+            <Grid item className={classes.modal}>
+              <ModalUser />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <UserList />
+        <Grid item md={12}>
+          {users.length ? <UserList /> : <PlaceHolder />}
+
         </Grid>
       </Grid>
     </>
@@ -47,8 +62,14 @@ export const Main = ({activeGenderHandler, users}) => {
 };
 
 const mapDispatchToProps = {
-  activeGenderHandler
+  activeGenderHandler,
+};
+
+const mapStateToProps = state => {
+  return {
+    activeGender: state.main.activeGender,
+    users: state.main.users
+  }
 }
 
-
-export default connect(null, mapDispatchToProps)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -26,9 +26,10 @@ const ModalUser = ({ addUserHandler }) => {
 
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
+  const [errorMail, setErrorMail] = useState(false)
 
-  const handleClose = () => setOpen(false);
-  const handleClickOpen = () => setOpen(true);
+  const handleCloseModal = () => setOpen(false);
+  const handleClickOpenModal = () => setOpen(true);
 
   const nameHandler = (value) =>
     setUser((prevState) => {
@@ -42,7 +43,7 @@ const ModalUser = ({ addUserHandler }) => {
     setUser((prevState) => {
       return {
         ...prevState,
-        email: value,
+        email: value.replace(/\s+/g, ''),
       };
     });
 
@@ -54,14 +55,35 @@ const ModalUser = ({ addUserHandler }) => {
       };
     });
 
+
+  // Регулярка
+
+  const validateEmail = (email) => {
+    const regular = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+    return regular.test(String(email).toLowerCase());
+  }
+
+  const validateUser = () => user.email && user.fullName && user.sex
+
+  const showError = () => !validateEmail(user.email) ? setErrorMail(true) : setErrorMail(false)
+
+
   return (
     <>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleClickOpenModal}
+      >
         Добавить пользователя
       </Button>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          setUser({})
+          handleCloseModal();
+        }}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Создание пользователя</DialogTitle>
@@ -76,9 +98,12 @@ const ModalUser = ({ addUserHandler }) => {
           <TextField
             margin="dense"
             label="Email Address"
+            value={user.email ? user.email : ""}
             type="email"
             fullWidth
             onChange={(e) => emailHandler(e.target.value)}
+            error={errorMail}
+            onBlur={showError}
           />
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="grouped-select">Пол</InputLabel>
@@ -97,15 +122,25 @@ const ModalUser = ({ addUserHandler }) => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            onClick={() => {
+              handleCloseModal();
+              setUser({});
+            }}
+            color="secondary"
+            variant="contained"
+          >
             Отмена
           </Button>
           <Button
             onClick={() => {
               addUserHandler(user);
-              handleClose()
+              handleCloseModal();
+              setUser({});
             }}
+            variant="contained"
             color="primary"
+            disabled={!validateUser() || !validateEmail(user.email)}
           >
             Создать
           </Button>

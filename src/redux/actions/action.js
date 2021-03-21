@@ -1,4 +1,4 @@
-import {ACTIVE_GENDER, ACTIVE_USER, ADD_USER, USER_DELETE} from "../types/types";
+import {ACTIVE_GENDER, ACTIVE_USER, ADD_USER, USER_DELETE, USER_EDIT} from "../types/types";
 
 export const addUserHandler = (data) => {
     console.log(data)
@@ -27,4 +27,11 @@ export const userDelete = (data, id) => {
         type: USER_DELETE,
         payload: data.filter(n => n.id !== id)
     }
+}
+
+export const userEdit = (users, user) => {
+    users[user.id - 1] = user
+    return {
+      type: USER_EDIT,
+    };
 }

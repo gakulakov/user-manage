@@ -1,27 +1,10 @@
-import {ACTIVE_GENDER, ACTIVE_USER, ADD_USER, USER_DELETE} from "../../types/types";
+import {ACTIVE_GENDER, ACTIVE_USER, ADD_USER, USER_DELETE, USER_EDIT} from "../../types/types";
 
 const initialState = {
   users: [
-    {
-      id: 1,
-      fullName: "Иванов Иван Иванович",
-      email: "ivanov.ivan@mail.ru",
-      sex: "male",
-    },
-    {
-      id: 2,
-      fullName: "Яна Яновна Янова",
-      email: "yanova.yana@mail.ru",
-      sex: "female",
-    },
-    {
-      id: 3,
-      fullName: "Никсель Пиксель",
-      email: "nixel.pixel@mail.ru",
-      sex: "other",
-    },
+
   ],
-  activeGender: null,
+  activeGender: 'all',
   activeUser: null
 };
 
@@ -46,6 +29,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         users: action.payload
+      }
+    case USER_EDIT :
+      return {
+        ...state,
+        users: [...state.users]
       }
 
     default:

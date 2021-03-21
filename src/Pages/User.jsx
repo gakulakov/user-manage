@@ -1,38 +1,75 @@
 import React from "react";
-import { Box, Grid, Paper, Typography } from "@material-ui/core";
+import { Box, Button, Grid, Paper, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const User = ({ activeUser, users }) => {
+  const selectGender = (gender) =>
+    gender === "male" ? "Мужчина" : gender === "female" ? "Женщина" : "Другое";
+
+  console.log(activeUser);
+
   return (
     <>
-      <Paper>
-        <Box padding={2}>
-        <Grid container>
-          <Grid item xs={6}>
-            <Typography variant={"h3"}>ФИО:</Typography>
-            <Typography variant={"h4"}>Иванов Иван Иванович</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant={"h3"}>Эл. почта:</Typography>
-            <Typography variant={"h4"}>ivanov.ivan@mail.ru</Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant={"h3"}>Пол:</Typography>
-            <Typography variant={"h4"}>Мужской</Typography>
-          </Grid>
-        </Grid>
-        </Box>
-      </Paper>
-
-      {/*<Typography variant={'h1'}>*/}
-      {/*    {users[activeUser].fullName}*/}
-      {/*</Typography>*/}
-      {/*<Typography variant={'h1'}>*/}
-      {/*    {users[activeUser].email}*/}
-      {/*</Typography>*/}
-      {/*<Typography variant={'h1'}>*/}
-      {/*    {users[activeUser].sex}*/}
-      {/*</Typography>*/}
+      {activeUser === -1 ? (
+        <Paper>
+          <Box padding={5}>
+            <Grid container spacing={4} justify={"center"}>
+              <Grid item xs={12}>
+                <Typography variant={"h5"} align={"center"}>
+                  Выберите пользователя на главной странице для просмотра
+                  подробной информации
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button variant={"contained"} color={"secondary"}>
+                  <Link
+                    style={{ textDecoration: "none", color: "#FFF" }}
+                    to={"/"}
+                  >
+                    Главная
+                  </Link>
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Paper>
+      ) : (
+        <Paper>
+          <Box padding={5}>
+            <Grid container justify={"space-between"} spacing={4}>
+              <Grid item md={4} >
+                <Typography variant={"h3"}>ФИО:</Typography>
+                <Typography variant={"h4"}>
+                  {users[activeUser].fullName}
+                </Typography>
+              </Grid>
+              <Grid item md={4}>
+                <Typography variant={"h3"}>Эл. почта:</Typography>
+                <Typography variant={"h4"}>
+                  {users[activeUser].email}
+                </Typography>
+              </Grid>
+              <Grid item md={4} >
+                <Typography variant={"h3"}>Пол:</Typography>
+                <Typography variant={"h4"}>
+                  {selectGender(users[activeUser].sex)}
+                </Typography>
+              </Grid>
+              <Grid item md={12} style={{ textAlign: "right" }}>
+                  <Link
+                    style={{ textDecoration: "none", color: "#FFF" }}
+                    to={"/"}
+                  >
+                <Button variant={"contained"} color={"secondary"}>
+                    Главная
+                </Button>
+                  </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Paper>
+      )}
     </>
   );
 };

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 const UserList = ({ users, activeGender }) => {
 
   return (
-    <Grid container>
+    <Grid container spacing={3}>
       {activeGender === "male"
         ? users
             .filter((i) => i.sex === "male")
